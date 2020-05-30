@@ -22,7 +22,7 @@ void setup()
   delay(10);
   digitalWrite(output1, LOW);
 
-  IPAddress ip(192,168,0,200);   
+  IPAddress ip(192,168,0,210);   
   IPAddress gateway(192,168,0,1);   
   IPAddress subnet(255,255,255,0); 
 
@@ -39,7 +39,14 @@ void setup()
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  server.begin(); 
+  server.begin();  
+}
+
+void testing()
+{  
+  file.open("test.txt","w+");
+  file.write("testy test");
+  file.close();
 }
 
 void loop()
@@ -52,6 +59,8 @@ void loop()
     setup();
   }
 
+  testing();
+  
   buttonPress();
   
   GUI();
@@ -63,14 +72,14 @@ void toggle()
   {
     garageDoorState = 1;
     digitalWrite(output1, HIGH);
-    delay(10);
+    delay(100);
     digitalWrite(output1, LOW);            
   } 
     else
   {
     garageDoorState = 0;
     digitalWrite(output1, HIGH);
-    delay(10);
+    delay(100);
     digitalWrite(output1, LOW);
   }
 }
@@ -134,7 +143,8 @@ void GUI()
             
             client.println("<body><h1>Garage Door Web Server</h1>");
             
-            client.println("<p><a href=\"/open\"><button class=\"button\">Open / Close</button></a></p>");
+            client.println("<p><a href=\"/open\"><button class=\"button\">Open</button></a></p>");
+            client.println("<p><a href=\"/close\"><button class=\"button\">Close</button></a></p>");
             
             if(garageDoorState==1)
             {
@@ -151,7 +161,7 @@ void GUI()
             }
             else if (header.indexOf("GET /open") >= 0) 
             {
-              client.println("<meta http-equiv=\"refresh\" content=\"0; URL='http://192.168.0.200/'\" />");
+              client.println("<meta http-equiv=\"refresh\" content=\"0; URL='http://192.168.0.210/'\" />");
               toggle();
             }
 
